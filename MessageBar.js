@@ -62,6 +62,7 @@ class MessageBar extends Component {
       title: props.title,
       message: props.message,
       avatar: props.avatar,
+      icon: props.icon,
       alertType: props.alertType || 'info',
       duration: props.duration || 3000,
 
@@ -105,6 +106,7 @@ class MessageBar extends Component {
       titleStyle: props.titleStyle || { color: 'white', fontSize: 18, fontWeight: 'bold' },
       messageStyle: props.messageStyle || { color: 'white', fontSize: 16 },
       avatarStyle: props.avatarStyle || { height: 40, width: 40, borderRadius: 20 },
+      iconStyle: props.iconStyle || { height: 40, width: 40, borderRadius: 20, marginRight: 10 },
 
       /* Position of the alert and Animation Type the alert is shown */
       position: props.position || 'top',
@@ -371,11 +373,31 @@ class MessageBar extends Component {
               { this.renderTitle() }
               { this.renderMessage() }
             </View>
+            { this.renderIcon() }
           </View>
         </TouchableOpacity>
       </Animated.View>
     );
   }
+
+  renderIcon() {
+    if (this.state.icon != null) {
+      var imageSource;
+      let uri = this.state.icon;
+      if (!!(typeof uri === 'string' && uri.match(/^https?:/))) {
+        // this is a network file
+        imageSource = { uri: this.state.icon }
+      } else {
+        // this is a local file : require('<path/to/my/local/image.extension>')
+        imageSource = this.state.icon
+      }
+
+      return (
+          <Image source={imageSource} style={this.state.iconStyle} />
+      );
+    }
+  }
+
 
   renderImage() {
     if (this.state.avatar != null) {
